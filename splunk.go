@@ -17,8 +17,8 @@ type SplunkResponse struct {
 func PostDataToSplunk(jsonData string, splunkServer string, splunkToken string) {
 
 	// Define http request object
+	postUri := "/services/collector"	
 	postData := []byte(`{"event":`+ jsonData + `}`)
-	postUri := "/services/collector"
 	url := splunkServer + postUri
 	req, err := http.NewRequest("POST",url,bytes.NewBuffer(postData))
 
@@ -28,7 +28,7 @@ func PostDataToSplunk(jsonData string, splunkServer string, splunkToken string) 
 	req.Header.Set("Authorization", authHeader)
 	req.Header.Set("Content-Type", "application/json")
 
-	// Create HTTP client with no SSL check (self signed certs)
+	// Create HTTP client with no SSL check (internally signed certs at NAB)
 	transport := &http.Transport{
         TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
